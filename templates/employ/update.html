@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+    emp_no=<input type="text" name="emp_no" value="{{emp.emp_no}}">
+    emp_name=<input type="text" name="emp_name" value="{{emp.emp_name}}">
+    emp_adress=<input type="text" name="emp_adress" value="{{emp.emp_adress}}">
+    <input type="submit" value="submit">
+
+
+</form>
+</body>
+</html>

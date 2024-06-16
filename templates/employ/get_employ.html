@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<tr>
+    <th>emp_no</th>
+    <th>emp_name</th>
+    <th>emp_adress</th><br>
+</tr>
+<tr>
+    {% for S in emp1%}
+    <td>{{S.emp_no}}</td>
+    <td>{{S.emp_name}}</td>
+    <td>{{S.emp_adress}}</td>
+    <td><a href="\delete/{{S.id}}">DELETE</a></td>
+    <td><a href="\update/{{S.id}}">EDIT</a></td>
+    <td><a href="{% url 'list' %}">list_view</a> </td>
+    <td><a href="{% url 'create'%}">create_view</a></td>
+    <td><a href="{% url 'update' pk=S.id %}">class_update</a></td>
+    <td><a href="{% url 'delete' pk=S.id %}">class_delete</a></td><br>
+
+</tr>
+   {% endfor %}
+      <td><a href="\add">Add employ</a></td><br>
+
+
+
+
+
+
+
+</body>
+</html>
