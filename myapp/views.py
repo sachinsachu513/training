@@ -1,4 +1,5 @@
 import io
+import json
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
@@ -234,6 +235,7 @@ from django.db.models import Count, Max, DecimalField
 
 from django.db.models import Count, F, Value
 
+
 def annotate(request):
     authors = author.objects.annotate(book_count=Count(F('books')))
     response_data = [
@@ -309,13 +311,17 @@ def q_find2(request):
     book = q_book.objects.filter(Q(author="shakesphere") & (Q(date=2021) | Q(date=2023)))
     # select * from books where author='shakesphere'& (date=2021 or date =2023)
     return HttpResponse(book)
+
+
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 
 import logging
-def excep(request ,id=4):
+
+
+def excep(request, id=4):
     try:
-     obj=q_book.objects.get(id=1)
+        obj = q_book.objects.get(id=1)
     except q_book.DoesNotExist:
         raise Http404("Book does not exist")
     # except Exception as e:
@@ -334,29 +340,30 @@ def excep(request ,id=4):
 
     return HttpResponse("book is avaialabale")
 
-def assert1(request,id=-1):
+
+def assert1(request, id=-1):
     try:
-        assert id>0
+        assert id > 0
     except AssertionError:
         return HttpResponse("the given not sattisfied ")
     return HttpResponse("ok")
 
+
 def multiple(rquest):
     try:
-     y=for_queryset.objects.get(position="junior")
+        y = for_queryset.objects.get(position="junior")
     except MultipleObjectsReturned as e:
-     return HttpResponse("error!",e)
-
+        return HttpResponse("error!", e)
 
 
 def increment(request):
-    product.objects.update(amount=F('amount')-90)
-    products=product.objects.all()
-    response=[
-            {'name': product.product, 'quantity': product.amount}
-            for product in products
-        ]
-    return JsonResponse(response,safe=False)
+    product.objects.update(amount=F('amount') - 90)
+    products = product.objects.all()
+    response = [
+        {'name': product.product, 'quantity': product.amount}
+        for product in products
+    ]
+    return JsonResponse(response, safe=False)
 
 
 from django.http import JsonResponse
@@ -371,54 +378,65 @@ def company_messages_view(request):
         message=Concat(
             Value("Company: "),
             F('name'),
-            Value(" needs more chairs.")) )
+            Value(" needs more chairs.")))
     response_data = [
-        { 'company': company.name,
-            'message': company.message}
+        {'company': company.name,
+         'message': company.message}
         for company in companies]
     return JsonResponse(response_data, safe=False)
+
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import pcc
 from .serializer import querychainingserializer
 
+
 class query(APIView):
-    def get(self,request):
-        obj=pcc.objects.all()
-        ser=querychainingserializer(obj,many=True)
+    def get(self, request):
+        obj = pcc.objects.all()
+        ser = querychainingserializer(obj, many=True)
         return Response(ser.data)
+
 
 from django.db.models import FloatField
 
 from .models import meta_table
-from django.db.models.functions import Cast,Collate
+from django.db.models.functions import Cast, Collate
+
+
 def cast(request):
-    s=employee.objects.filter(emp_name=Collate(Value("sachin"), "nocase"))
+    s = employee.objects.filter(emp_name=Collate(Value("sachin"), "nocase"))
     return HttpResponse(s)
-from django.db.models.functions import Floor,Extract,Ceil,Greatest
+
+
+from django.db.models.functions import Floor, Extract, Ceil, Greatest
+
 
 def extract(request):
     queryset = meta_table.objects.annotate(
-    year=Extract('created_at', 'year'),
-    month=Extract('created_at', 'month'),
-    day=Extract('created_at', 'day'))
+        year=Extract('created_at', 'year'),
+        month=Extract('created_at', 'month'),
+        day=Extract('created_at', 'day'))
 
     extracted_data = []
     for obj in queryset:
         extracted_data.append((obj.year, obj.month, obj.day))
     return JsonResponse(extracted_data, safe=False)
 
-from .models import queryfuntion
-def ceil(request):
 
+from .models import queryfuntion
+
+
+def ceil(request):
     obj = queryfuntion.objects.annotate(
         x_ceil=Ceil('x'),
-        y_ceil=Ceil('y') )
+        y_ceil=Ceil('y'))
     extracted_data = []
     for d in obj:
         extracted_data.append({'x_ceil': d.x_ceil, 'y_ceil': d.y_ceil})
     return JsonResponse(extracted_data, safe=False)
+
 
 # # authors = author.objects.annotate(book_count=Count('books'))
 # # response_data = [
@@ -546,7 +564,7 @@ from .models import Book
 # obj=product.objects.in_bulk(id_list)
 # print(obj)
 
-from django.db.models import Sum,Avg
+from django.db.models import Sum, Avg
 
 # obj=q_book.objects.latest("date")
 # print(obj)
@@ -609,7 +627,7 @@ from django.db.models import Sum,Avg
 # obj=product.objects.aggregate(sum=Sum("amount"))
 # y=obj['sum']
 # print(y)
-from .models import Donor,manyto
+from .models import Donor, manyto
 # obj=manyto.objects.prefetch_related("many").all()
 # for i in obj:
 #    for donors in manyto.name.all():
@@ -617,7 +635,8 @@ from .models import Donor,manyto
 
 # obj=constraints.objects.filter(age__gte=30).aggregate(Avg("age"))
 # print(obj)
-from .models import companys,employess,organization
+from .models import companys, employess, organization
+
 # g=companys.objects.annotate(salary=Max('employess__emp_salary'))
 # response=[
 #     {"company":com.company_name,"salary":com.salary}
@@ -674,7 +693,7 @@ from .models import companys,employess,organization
 # print(response)
 # obj1=companys.objects.values_list("company_name").annotate(Count("employess__emp_no"))
 # print(obj1)
-g=[('sachin',),('shanil',)]
+g = [('sachin',), ('shanil',)]
 # for i in g:+
 #     print(i[0][:3])
 
@@ -686,8 +705,8 @@ from django.db.models.functions import Length
 # obj=employee.objects.annotate(length=Length('emp_name')).filter(length=7)
 # print(obj)
 
-from django.db.models import FloatField ,IntegerField
-from django.db.models.functions import Cast,Coalesce
+from django.db.models import FloatField, IntegerField
+from django.db.models.functions import Cast, Coalesce
 # >>> Author.objects.create(age=25, name="Margaret Smith")
 # >>> author = Author.objects.annotate(
 # ...     age_as_float=Cast("age", output_field=FloatField()),
@@ -696,8 +715,8 @@ from django.db.models.functions import Cast,Coalesce
 # obj=constraints.objects.annotate(primary_name=Coalesce('name','age',Value('noname'))).get()
 # for i in obj:
 #     print(i.primary_name)
-from django.db.models import FloatField,IntegerField,CharField
-from django.db.models.functions import Cast,Coalesce,Collate,Greatest,JSONObject,Lower,Least,NullIf
+from django.db.models import FloatField, IntegerField, CharField
+from django.db.models.functions import Cast, Coalesce, Collate, Greatest, JSONObject, Lower, Least, NullIf
 from .models import function
 # obj=function.objects.annotate(age_as=Cast("age",output_field=FloatField())).get(id=1)
 # print(obj.age_as)
@@ -730,7 +749,8 @@ from .models import great
 # obj2=great.objects.annotate(null=NullIf("weight","height"))
 # for i in obj2:
 #     print(i.null)
-from django.db.models.functions import Round,Chr,Concat,Left,Length,Lower,Upper,Substr,LPad,Repeat,Replace,Reverse,Right,RPad,Upper
+from django.db.models.functions import Round, Chr, Concat, Left, Length, Lower, Upper, Substr, LPad, Repeat, Replace, \
+    Reverse, Right, RPad, Upper
 # obj=queryfuntion.objects.annotate(x_round=Round('y'))
 # for i in obj:
 #     print(i.x_round)
@@ -749,6 +769,7 @@ from django.db.models.functions import Round,Chr,Concat,Left,Length,Lower,Upper,
 # for i in obj:
 #     print(i.len)
 from django.db.models.functions import FirstValue
+
 # obj=function.objects.annotate(king=FirstValue("name"))
 # print(obj)
 # function.objects.create(name='sa',age=15)
@@ -823,7 +844,9 @@ from django.db.models.functions import FirstValue
 # g=employess.objects.filter(emp_salary__lt=10000).values_list()
 # print(g)
 #
-# obj=organization.objects.filter(companys__company_name='jio cinema').values("org_name","owner_name",'org_location','companys__company_name','companys__company_owner')
+obj = organization.objects.filter(companys__company_name='jio cinema').values("org_name", "owner_name", 'org_location',
+                                                                              'companys__company_name',
+                                                                              'companys__company_owner')
 # print(obj)
 
 # obj=employess.objects.get(emp_adress='ghjkl')
@@ -840,7 +863,6 @@ from .models import rank
 # obj=rank.objects.filter(student__iendswith='N').values_list()
 # print(obj)
 from .models import fields
-
 
 # start_date = datetime.date(2023, 5, 5)
 # end_date = datetime.date(2025, 12, 1)
@@ -882,39 +904,44 @@ from django.db.models import OuterRef, Subquery
 # print(obj)
 from .serializer import employeesserializer
 
+
 class getemploy(APIView):
-    def get(self,request):
-        obj=employess.objects.all()
-        serial=employeesserializer(obj,many=True)
+    def get(self, request):
+        obj = employess.objects.all()
+        serial = employeesserializer(obj, many=True)
         return Response(serial.data)
+
+
 class postemploy(APIView):
-    def post(self,request):
-        obj=employeesserializer(data=request.data)
+    def post(self, request):
+        obj = employeesserializer(data=request.data)
         if obj.is_valid():
             obj.save()
-            return Response(obj.data,status=status.HTTP_201_CREATED)
+            return Response(obj.data, status=status.HTTP_201_CREATED)
+
 
 class updateemploy(APIView):
-    def put(self,request,id):
-        obj=employess.objects.get(id=id)
-        obje=employeesserializer(obj,data=request.data)
+    def put(self, request, id):
+        obj = employess.objects.get(id=id)
+        obje = employeesserializer(obj, data=request.data)
         if obje.is_valid():
             obje.save()
-            return Response(obje.data,status=status.HTTP_202_ACCEPTED)
+            return Response(obje.data, status=status.HTTP_202_ACCEPTED)
+
 
 class deleteemploy(APIView):
-    def delete(self,request,id):
-        obj=employess.objects.get(id=id)
-        obje=employeesserializer(obj,data=request.data)
+    def delete(self, request, id):
+        obj = employess.objects.get(id=id)
+        obje = employeesserializer(obj, data=request.data)
         obj.delete()
-        return Response(obje.error_messages,status=status.HTTP_204_NO_CONTENT)
+        return Response(obje.error_messages, status=status.HTTP_204_NO_CONTENT)
+
 
 class serializerqueryAPIVIEW(APIView):
-    def get(self,request):
-        obj=employess.objects.annotate(entries=F('emp_salary')).filter(entries__gt=10000)
-        serializer=employeesserializer(obj,many=True)
+    def get(self, request):
+        obj = employess.objects.annotate(entries=F('emp_salary')).filter(entries__gt=10000)
+        serializer = employeesserializer(obj, many=True)
         return Response(serializer.data)
-
 
 
 # obj=employess.objects.annotate(entries=F('emp_salary')).filter(entries__gt=10000).values('emp_name','emp_salary')
@@ -989,7 +1016,6 @@ class serializerqueryAPIVIEW(APIView):
 # print(fg)
 from .models import Post
 
-
 # y=Post.objects.annotate(year=ExtractQuarter('date_field')).values('year')
 # y=Post.objects.annotate(year=ExtractWeek('date_field')).values('year')
 # print(y)
@@ -997,7 +1023,7 @@ from .models import Post
 # print(y)
 # y=Post.objects.filter(date_field__lt=Now())
 # print(y)
-from django.db.models import Count, DateTimeField,DateField
+from django.db.models import Count, DateTimeField, DateField
 from datetime import datetime
 from django.db.models.functions import LPad
 from django.db.models.functions import LPad
@@ -1020,6 +1046,8 @@ from django.db.models.functions import LPad
 # print(obj)
 from django.db.models import Window
 from django.db.models.functions import DenseRank
+
+
 # obj=employess.objects.annotate(some=Cast('emp_salary',output_field=FloatField())).values('some')
 # print(obj)
 
@@ -1044,13 +1072,61 @@ from django.db.models.functions import DenseRank
 # print(obj)
 
 class empapi(APIView):
- def get(self,request,emp_name):
-     try:
-      obj=employess.objects.get(emp_name=emp_name)
-     except employess.DoesNotExist:
-         return Response(status=status.HTTP_404_NOT_FOUND)
-     serializer=employeesserializer(obj)
-     return Response(serializer.data)
+    def get(self, request, emp_name):
+        try:
+            obj = employess.objects.get(emp_name=emp_name)
+        except employess.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = employeesserializer(obj)
+        return Response(serializer.data)
+
+
+# obj=employess.objects.annotate(something=F('emp_salary')).order_by('-emp_salary').values_list('emp_name','emp_salary')[:5]
+# print(obj)
+# obj=employess.objects.annotate(jkm=F('emp_name')).order_by('emp_name').values_list('emp_name')
+# print(obj)
+# obj=organization.objects.filter(companys__company_name='goodday').values_list("org_name","org_location","companys__company_owner","companys__company_name")
+# print(obj)
+obj = companys.objects.filter(company_name='jio cinema').select_related('company_org_name').annotate(
+    some=Max("employess__emp_salary")).values_list("some",flat=True)
+print(obj)
+
+from .serializer import somethingserializer
+
+from django.core.serializers.json import DjangoJSONEncoder
+class spor(APIView):
+    def post(self, request):
+
+        if request.method == "POST":
+            obj = companys.objects.all().select_related('company_org_name').annotate(
+                maximum=Max("employess__emp_salary")).values("company_name","company_org_name__org_name","company_org_name__owner_name","maximum")
+
+
+            response=[
+                { "company_name":i["company_name"],
+                "org_name":i["company_org_name__org_name"],
+                "owner_name":i["company_org_name__owner_name"],
+                "maximum":i["maximum"],
+                  }
+                for i in obj
+            ]
+            return Response(response)
+
+
+class annotatemethod (APIView):
+    def post(self,request):
+        if request.method=="POST":
+            obj=companys.objects.all()
+            ser=somethingserializer(obj,many=True)
+            return Response(ser.data)
+
+salaries = employess.objects.values_list('emp_salary',flat=True)
+print(salaries)
+
+
+
+
+
 
 
 

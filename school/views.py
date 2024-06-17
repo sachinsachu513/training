@@ -101,6 +101,29 @@ class student(APIView):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # {
 #     "action": "update_student",
 #     "student_id": 1,

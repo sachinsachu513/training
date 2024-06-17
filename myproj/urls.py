@@ -54,7 +54,7 @@ urlpatterns = [
     path('first/',views.firstt),
     path('count/',views.count),
     path('sum/',views.sum),
-    path('avg/',views.avg),
+    # path('avg/',views.avg),
     path('max/',views.max),
     path('filtermax/',views.filter_max),
     path('q_find/',views.q_find),
@@ -77,6 +77,8 @@ urlpatterns = [
     path('deleteem/<id>',views.deleteemploy.as_view()),
     path('newww/',views.serializerqueryAPIVIEW.as_view()),
     path('urlqry/<str:emp_name>/',views.empapi().as_view()),
+    path('beck/', views.spor().as_view()),
+    path('jk/', views.annotatemethod().as_view()),
     path('school/',include("school.urls")),
 
 ]
