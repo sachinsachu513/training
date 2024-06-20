@@ -89,14 +89,11 @@ class student(APIView):
         if School.objects.filter(name=school_name):
           return Response({'error': "School does not exist"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-         School.objects.filter(id=school_id).update(name=school_name, location=location)
+         School.eobjects.filter(id=school_id).update(name=school_name, location=location)
 
          return Response({'sucess': "School updated Sucessfully"}, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
-
+from datetime import datetime
 
 
 

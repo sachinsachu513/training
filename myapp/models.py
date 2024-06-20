@@ -251,11 +251,14 @@ class companys(models.Model):
 
 
 class employess(models.Model):
-    emp_no=models.CharField(max_length=15)
+    emp_no=models.CharField(max_length=15,unique=True)
     emp_name=models.CharField(max_length=15)
     emp_adress=models.CharField(max_length=15)
+    image_base=models.TextField(null=True,blank=True)
+    image=models.FileField(upload_to='employee_images/',null=True,blank=True)
     emp_company_name=models.ForeignKey(companys,on_delete=models.CASCADE)
     emp_salary=models.IntegerField(default=10000)
+    imageb64=models.FileField(null=True,blank=True)
 
     def __str__(self):
         return self.emp_name

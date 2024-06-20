@@ -41,5 +41,10 @@ class somethingserializer(serializers.ModelSerializer):
 
     def get_average_salary(self, obj):
         avg = employess.objects.filter(emp_company_name=obj).aggregate(avgsalary=Avg("emp_salary"))["avgsalary"]
-
         return avg
+
+class taskserializer(serializers.ModelSerializer):
+    class Meta:
+        model=employess
+        fields='__all__'
+

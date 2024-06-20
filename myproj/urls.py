@@ -79,7 +79,9 @@ urlpatterns = [
     path('urlqry/<str:emp_name>/',views.empapi().as_view()),
     path('beck/', views.spor().as_view()),
     path('jk/', views.annotatemethod().as_view()),
+    path('task/', views.task.as_view()),
     path('school/',include("school.urls")),
+
 
 ]
 
